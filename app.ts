@@ -144,13 +144,54 @@ const player2 = new player(16, 'Cloe', 'Doge', 12, 'Chess');
 console.log(player2.studInfo()); //parent class method
 console.log(player2.playerInfo());
 //------------------generics------------------//
-function getArray<T>(item: T[]): T[] {
-	return item;
-}
-let numArr = getArray<number>([1, 2, 3, 4, 5]);
-console.log(numArr);
-let strArr = getArray<string>(['hii','I','am','ani']);
-console.log(strArr);
+// function getArray<T>(item: T[]):T[] {
+// 	let result=item.map((ele: T) => {
+// 		if (typeof ele === 'number') return ele * 2;
+// 		else return ele;
+// 	})
+// 	return result
+// }
+// let numArr= getArray<number>([1, 2, 3, 4, 5]);
+// console.log(numArr);
+// let strArr= getArray<string>(['hii', 'I', 'am', 'ani']);
+// console.log(strArr);
 //------------------Namespaces------------------//
-let val = multiply.figure(5, 7);
-console.log(val);
+// let val = multiply.figure(5, 7);
+// console.log(val);
+//------------------Any vs Unknown------------------//
+let exampleAny:any;
+let exampleUnknown:unknown;
+ exampleAny='1'; 
+ exampleAny=true;
+ exampleUnknown='Hii I am ani';
+ exampleUnknown=4546;
+ //acces member or method
+//  exampleAny.trim();
+//  exampleAny.wssdf.er.ert.ert.ert.ert;
+//  exampleUnknown.trim() //error
+//  exampleUnknown.sdf.sd.sdf.sdf; //error
+ if(typeof exampleUnknown === 'string'){
+	exampleUnknown.trim(); //check type before use
+ }
+ //------------------Union------------------//
+ interface circle { kind: "circle"; radius: number }
+ interface square { kind: "square"; x: number }
+ interface triangle { kind: "triangle"; x: number; y: number };
+//  union all interface in type
+ type Shape = circle | square | triangle;
+// shape Obj   
+const obj : Shape = {
+  kind : 'triangle',
+  y:5,
+  x:8
+};
+function area(s: Shape) {
+  if (s.kind === "circle") {
+    return Math.PI * s.radius * s.radius;
+  } else if (s.kind === "square") {
+    return s.x * s.x;
+  } else {
+    return (s.x * s.y) / 2;
+  }
+}
+console.log('are of',obj.kind,'is',area(obj));

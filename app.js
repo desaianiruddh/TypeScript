@@ -116,17 +116,13 @@ const player2 = new player(16, 'Cloe', 'Doge', 12, 'Chess');
 console.log(player2.studInfo()); //parent class method
 console.log(player2.playerInfo());
 //------------------generics------------------//
-// function getArray<T>(item: T[]):T[] {
-// 	let result=item.map((ele: T) => {
-// 		if (typeof ele === 'number') return ele * 2;
-// 		else return ele;
-// 	})
-// 	return result
-// }
-// let numArr= getArray<number>([1, 2, 3, 4, 5]);
-// console.log(numArr);
-// let strArr= getArray<string>(['hii', 'I', 'am', 'ani']);
-// console.log(strArr);
+function getArray(item) {
+    return item;
+}
+let numArr = getArray([1, 2, 3, 4, 5]);
+console.log(numArr);
+let strArr = getArray(['hii', 'I', 'am', 'ani']);
+console.log(strArr);
 //------------------Namespaces------------------//
 // let val = multiply.figure(5, 7);
 // console.log(val);
@@ -163,5 +159,13 @@ function area(s) {
         return (s.x * s.y) / 2;
     }
 }
-console.log('are of', obj.kind, 'is', area(obj));
+console.log('area of', obj.kind, 'is', area(obj));
+const student2 = { name: 'ani', fname: 'aniruddh', rollNo: 18, lname: 'desai', enrollment: 26 };
+console.log(student2);
+const employee3 = {
+    fname: 'Mahesh',
+    deptID: 123,
+    empID: 646
+};
+console.log(employee3);
 //# sourceMappingURL=app.js.map

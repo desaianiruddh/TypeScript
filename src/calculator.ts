@@ -20,7 +20,7 @@ display.innerText = '0';
 type boolOrStr = string | boolean;
 //all the state and variables
 let result: number;
-let currentText: any = '';
+let currentText: string = '';
 let lastElements: string = '';
 let tempNum: string = '';
 let deg: boolean = true;
@@ -44,8 +44,13 @@ let isBracket: boolean = false;
 let bracketStartIndex: number, bracketEndIndex: number;
 changeList();
 //onload message
-window.onload = () => {
+window.onload = (): void => {
   console.log("Calculator Loaded Successfully");
+  //disable button of memory function
+  disabledBtn.forEach((btn: Node) => {
+    let buttonElement = btn as HTMLInputElement
+    buttonElement.disabled = true;
+  })
 }
 //alert function
 function alertMsg(msg: string): void {
@@ -102,19 +107,21 @@ const setFE = (): void => {
   }
 }
 //memory function
-memoryFunction.forEach((memoryFunction: Node) => {
-  memoryFunction.addEventListener('click', (event: Event) => {
+memoryFunction.forEach((memoryFunction: Node): void => {
+  memoryFunction.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
     //set enable to disabled button
     if (e === 'M+' || e === 'M-' || e === 'MS') {
-      disabledBtn.forEach((btn: any) => {
-        btn.classList.remove('disabled');
+      disabledBtn.forEach((btn: Node): void => {
+        let buttonElement = btn as HTMLInputElement
+        buttonElement.disabled = false;
       })
     }
     else {
-      disabledBtn.forEach((btn: any) => {
-        btn.classList.add('disabled');
+      disabledBtn.forEach((btn: Node): void => {
+        let buttonElement = btn as HTMLInputElement
+        buttonElement.disabled = true;
       })
     }
     switch (e) {
@@ -143,14 +150,18 @@ memoryFunction.forEach((memoryFunction: Node) => {
           return sum;
         }, 0);
         display.innerText = total.toString();
+        for (let i = 0; i < memory.length; i++) {
+          memory.pop();
+        }
+        memory[0] = 0;
         console.log('MR >> ' + memory); //print added element
         break;
     }
   })
 })
 //click trigonometry
-trigonometry.forEach((trigonometry: Node) => {
-  trigonometry.addEventListener('click', (event: Event) => {
+trigonometry.forEach((trigonometry: Node): void => {
+  trigonometry.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
     clearVar();
@@ -223,7 +234,7 @@ const evalTrigonometry: mathOrTrigonometryIF = (functionName, num) => {
   }
 }
 //mathFunction add text
-mathFunction.forEach((mathFunction: Node) => {
+mathFunction.forEach((mathFunction: Node): void => {
   mathFunction.addEventListener('click', (event: Event) => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
@@ -273,9 +284,10 @@ const evalMathOperation: mathOrTrigonometryIF = (functionName, num) => {
 //and second list to first list
 function changeList(): void {
   if (isSecondList) {
-    firstList.forEach((fList: any) => {
-      let element: string = fList.value;
-      switch (element) {
+    firstList.forEach((fListElement: Node): void => {
+      let fList = fListElement as HTMLButtonElement;
+      let elementVal: string = fList.value;
+      switch (elementVal) {
         case 'element1':
           fList.innerHTML = 'sin<sup>-1</sup>';
           break;
@@ -300,9 +312,10 @@ function changeList(): void {
     isSecondList = false;
   }
   else {
-    firstList.forEach((fList: any) => {
-      let element: string = fList.value;
-      switch (element) {
+    firstList.forEach((fListElement: Node): void => {
+      let fList = fListElement as HTMLButtonElement;
+      let elementVal: string = fList.value;
+      switch (elementVal) {
         case 'element1':
           fList.innerHTML = 'x<sup>2</sup>';
           break;
@@ -328,8 +341,8 @@ function changeList(): void {
   }
 }
 //get list elements and value
-firstList.forEach((list: Node) => {
-  list.addEventListener('click', (event: Event) => {
+firstList.forEach((list: Node): void => {
+  list.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLButtonElement;
     let { innerText, value } = eventTarget;
     if (!isSecondList) {
@@ -348,8 +361,8 @@ const firstListClick: changingListIF = (functionName, elementVal) => {
         alertMsg('Add Value For Square');
       }
       else {
-        currentText = parseFloat(currentText) ** 2;
-        display.innerText = currentText.toString();
+        currentText = (parseFloat(currentText) ** 2).toString();
+        display.innerText = currentText;
       }
       break;
     case 'element2':
@@ -357,9 +370,8 @@ const firstListClick: changingListIF = (functionName, elementVal) => {
         alertMsg('Add Value For Square Root');
       }
       else {
-        currentText = parseFloat(currentText) ** (1 / 2);
-        currentText = currentText.toFixed(4);
-        display.innerText = currentText.toString();
+        currentText = ((parseFloat(currentText) ** (1 / 2)).toFixed()).toString();
+        display.innerText = currentText;
       }
       break;
     case 'element3':
@@ -378,8 +390,8 @@ const firstListClick: changingListIF = (functionName, elementVal) => {
         alertMsg('Add Value of 10s exponent');
       }
       else {
-        currentText = 10 ** parseFloat(currentText);
-        display.innerText = currentText.toString();
+        currentText = (10 ** parseFloat(currentText)).toString();
+        display.innerText = currentText;
       }
       break;
     case 'element5':
@@ -426,15 +438,16 @@ function mathE(): void {
   display.innerText = lastElements + 'e';
 }
 //clear button click
-clearDisplay.forEach((clr: Node) => {
-  clr.addEventListener('click', (event: Event) => {
+clearDisplay.forEach((clr: Node): void => {
+  clr.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
     if (e === 'C') {
       clearVar();
       display.innerText = '0';
-      disabledBtn.forEach((btn: any) => {
-        btn.classList.add('disabled');
+      disabledBtn.forEach((btn: Node) => {
+        let buttonElement = btn as HTMLInputElement
+        buttonElement.disabled = true;
       })
       clickFE.classList.remove('btn-dark');
       console.log('Clear All'); //print clear All
@@ -447,12 +460,14 @@ clearDisplay.forEach((clr: Node) => {
           display.innerText = lastElements + currentText;
         }
         else {
-          let i = lastElements.length - 1;
-          if (lastElements[i] === '+' || lastElements[i] === '-' || lastElements[i] === 'x' || lastElements === '÷')
+          let i: number = lastElements.length - 1;
+          if (lastElements[i] === '+' || lastElements[i] === '-' || lastElements[i] === 'x' || lastElements === '÷') {
             //removed elements will be currentText
-            currentText = plusMinus.pop();
-          currentText = currentText.toString();
-          let j = currentText.length;
+            let tempCurrentText: number = plusMinus[plusMinus.length - 1];
+            currentText = tempCurrentText.toString();
+            plusMinus.pop();
+          }
+          let j: number = currentText.length;
           //remove last element from lastElements string
           i = i - j;
           lastElements = lastElements.substring(0, i);
@@ -485,13 +500,12 @@ clearDisplay.forEach((clr: Node) => {
 })
 // 1/x function
 function inverseNum(): void {
-  currentText = parseFloat(currentText) ** (-1);
-  currentText = currentText.toFixed(2);
-  display.innerText = lastElements + currentText.toString();
+  currentText = ((parseFloat(currentText) ** (-1)).toFixed(2)).toString();
+  display.innerText = lastElements + currentText;
 }
 //operation
-operator.forEach((operation: Node) => {
-  operation.addEventListener('click', (event: Event) => {
+operator.forEach((operation: Node): void => {
+  operation.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
     if (e === '+' || e === '-') {
@@ -502,9 +516,6 @@ operator.forEach((operation: Node) => {
       checkPriority();
       e === 'x' ? isMultiplication = true : isDivision = true;
       isMod = isExp = false;
-    }
-    else if (e === 'n!') {
-      currentText = parseFloat(currentText);
     }
     else if (e === 'mod') {
       if (!currentText) {
@@ -518,7 +529,7 @@ operator.forEach((operation: Node) => {
     }
     else if (e === 'exp') {
       if (!currentText) {
-        currentText = 1;
+        currentText = '1';
       }
       checkPriority();
       e === 'exp' ? isExp = true : isExp = false;
@@ -659,8 +670,8 @@ function evalBracketElements(): number {
   return total;
 }
 //click number
-number.forEach((number: Node) => {
-  number.addEventListener('click', (event: Event) => {
+number.forEach((number: Node): void => {
+  number.addEventListener('click', (event: Event): void => {
     let eventTarget = event.target as HTMLElement;
     let e: string = eventTarget.innerText;
     //check for multiple dot
@@ -735,7 +746,7 @@ function equal(): void {
     result = ans;
   }
   else if (plusMinus[0]) {
-    currentText ? currentText : currentText = 0;
+    currentText ? currentText : currentText = '0';
     checkPriority();
     operationState = true;
     let sum = 0;
@@ -751,7 +762,7 @@ function equal(): void {
     }
   }
   else {
-    !currentText ? result = 0 : result = currentText;
+    !currentText ? result = 0 : result = parseFloat(currentText);
   }
   //if the result is in decimal
   result % 1 === 0 ? result = result : result = parseFloat(result.toFixed(4));
@@ -759,10 +770,10 @@ function equal(): void {
   display.innerText = result.toString();
   let tempAns = result;
   clearVar();
-  currentText = tempAns;
+  currentText = tempAns.toString();
 }
 //input from keyboard
-window.addEventListener('keydown', (event: KeyboardEvent) => {
+window.addEventListener('keydown', (event: KeyboardEvent): void => {
   let e: string = event.key;
   //for number
   if (
@@ -816,24 +827,27 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 })
 //number click function
-const clickNumButton: keyboardClickButtonIF = (key: string) => {
-  number.forEach((btn: any) => {
+const clickNumButton: keyboardClickButtonIF = (key) => {
+  number.forEach((btnElement: Node) => {
+    let btn = btnElement as HTMLButtonElement;
     if (btn.innerText === key) {
       btn.click()
     }
   })
 }
 //operator click function
-const clickOperatorButton: keyboardClickButtonIF = (key: string) => {
-  operator.forEach((btn: any) => {
+const clickOperatorButton: keyboardClickButtonIF = (key) => {
+  operator.forEach((btnElement: Node) => {
+    let btn = btnElement as HTMLButtonElement;
     if (btn.innerText === key) {
       btn.click();
     }
   })
 }
 //click clear
-const clickClearAll: keyboardClickButtonIF = (key: string) => {
-  clearDisplay.forEach((btn: any) => {
+const clickClearAll: keyboardClickButtonIF = (key) => {
+  clearDisplay.forEach((btnElement: Node) => {
+    let btn = btnElement as HTMLButtonElement;
     if (btn.value === key) {
       btn.click();
     }

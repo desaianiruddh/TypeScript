@@ -370,7 +370,7 @@ const firstListClick: changingListIF = (functionName, elementVal) => {
         alertMsg('Add Value For Square Root');
       }
       else {
-        currentText = ((parseFloat(currentText) ** (1 / 2)).toFixed()).toString();
+        currentText = ((parseFloat(currentText) ** (1 / 2)).toFixed(2)).toString();
         display.innerText = currentText;
       }
       break;
@@ -462,6 +462,12 @@ clearDisplay.forEach((clr: Node): void => {
         else {
           let i: number = lastElements.length - 1;
           if (lastElements[i] === '+' || lastElements[i] === '-' || lastElements[i] === 'x' || lastElements === '÷') {
+            switch (lastElements[i]) {
+              case '-': operationState = true; break;
+              case '+': operationState = true; break;
+              case '÷': isDivision = false; break;
+              case '*': isMultiplication = false; break;
+            }
             //removed elements will be currentText
             let tempCurrentText: number = plusMinus[plusMinus.length - 1];
             currentText = tempCurrentText.toString();
